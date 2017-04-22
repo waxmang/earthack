@@ -46,6 +46,30 @@
 	<!--if logged in-->
 	<div ng-if="loggedIn">
         you are logged in
+
+        <div class="row" ng-if="showUpdateForm">
+            <form class="col s8">
+                <div class="input-field col s6">
+                    <input placeholder="" id="company" type="text" class="validate">
+                    <label for="company">Company</label>
+                </div>
+                <div class="input-field col s6">
+                    <input id="location" type="text" class="validate">
+                    <label for="location">Location</label>
+                </div>
+                <p>
+                    <input class="with-gap" name="establishment-type" type="radio" id="restaurant"  />
+                    <label for="restaurant">Restaurant</label>
+                </p>
+                <p>
+                    <input class="with-gap" name="establishment-type" type="radio" id="nonprofit"  />
+                    <label for="nonprofit">Nonprofit</label>
+                </p>
+
+                <a class="waves-effect waves-light btn" ng-click="updateUser()">submit</a>
+            </form>
+        </div>
+
 		<!--logged in as restaurant-->
 		<div ng-if="user.userType == 'Restaurant'">
 			<h2>you are a restaurant</h2>
