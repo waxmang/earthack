@@ -2,5 +2,5 @@
 
 angular.module('earthackApp', [
     'app.routes',
-    'restaurantCtrl'
+    'mainCtrl'
 ]);
