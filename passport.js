@@ -1,6 +1,6 @@
 var GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
 
-var User = require('./app/models/rUser')
+var User = require('./app/models/User')
 var configAuth = require('./config');
 
 var id = process.env.clientID || configAuth.googleAuth.clientId;
