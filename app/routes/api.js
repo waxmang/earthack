@@ -18,16 +18,13 @@ module.exports =  function(app,express,passport){
         });
     });
 
+    //get current logged in user info
+    apiRouter.get('/user', function(req, res) {
+        res.json(req.user);
+    });
+
 
     apiRouter.route('/user/:user_id')
-
-    	.get(function(req,res){
-    		User.findOne({'id':req.params.user_id},function(err,user){
-    			if (err) return res.send(err);
-    			//return that user
-    			res.json(user);
-    		});
-    	});
 
     	.put(function(req,res){
     		User.findOne({'id':req.params.user_id},function(err,user){
@@ -107,7 +104,7 @@ module.exports =  function(app,express,passport){
     					if (err) {
     						return res.send(err);
     					}	else{
-    						return res.json(message:"Entry updated!");
+    						return res.json("message: Entry updated!");
     					}
     				});
     			}
