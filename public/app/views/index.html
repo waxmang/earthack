@@ -32,7 +32,7 @@
 
 
 	<!-- controllers -->
-	<script src="app/controllers/restaurantCtrl.js"></script>
+	<script src="app/controllers/mainCtrl.js"></script>
 
 	<!-- main Angular app files -->
 	<script src="app/app.routes.js"></script>
@@ -40,9 +40,26 @@
 
 
 </head>
-<body ng-app="earthackApp" ng-controller="restaurantController as main">
-	<div class="container">
-		<h2>Hello, {{ main.user }}</h2>
+<body ng-app="earthackApp" ng-controller="mainController">
+
+	<!--if logged in-->
+	<div ng-if="checkLoggedIn">
+		
+		<!--logged in as restaurant-->
+		<div ng-if="user.userType == 'Restaurant'">
+			<h2>you are a restaurant</h2>
+		</div>
+
+
+		<!--logged in as nonprofit-->
+		<div ng-if></div>
+
 	</div>
+
+	<!--if not logged in-->
+	<div ng-if="!checkLoggedIn"></div>
+
+
+
 </body>
 </html>
