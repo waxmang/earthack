@@ -27,21 +27,30 @@ module.exports =  function(app,express,passport){
     apiRouter.route('/user/:user_id')
 
     	.put(function(req,res){
-    		User.findOne({'id':req.params.user_id},function(err,user){
+            console.log(req.params.user_id);
+    		User.findOne({'id':req.params.user_id},function(err, user){
+
     			if (err) return res.send(err);
-    			
-    			//update info
-    			if (req.body.name) user.name = req.body.name;
-    			if (req.body.userType) user.userType = req.body.userType;
-    			if (req.body.location) user.location = req.body.location;
 
-    			//save the user
-    			user.save(function(err){
-    				if (err) return res.send(err);
+                if (req.user != null && req.user.id == req.params.user_id){
 
-    				//return update message
-    				res.json({message: 'User updated!'});
-    			});
+        			//update info
+        			if (req.body.name) user.name = req.body.name;
+        			if (req.body.userType) user.userType = req.body.userType;
+        			if (req.body.location) user.location = req.body.location;
+                    if (req.body.entityName) user.entityName = req.body.entityName;
+
+
+
+        			//save the user
+        			user.save(function(err){
+        				if (err) return res.send(err);
+
+        				//return update message
+        				res.json({message: 'User updated!'});
+        			});
+
+                };
 
     		})
     	})
