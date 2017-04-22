@@ -30,7 +30,7 @@ app.use(function(req,res,next) {
 app.use(morgan('dev'));
 
 //connect to our database
-//mongoose.connect(config.database);
+mongoose.connect(config.database);
 
 //set static files location; where to look for angular files (index.html)
 //used for requests that our front end will make
@@ -38,17 +38,18 @@ app.use(express.static(__dirname+'/public'));
 app.set('views',path.join(__dirname,'/public/app/views'));
 
 //required for passport
-//app.use(session({secret:'ilovescotchscotchyscotchscotch'}));
-//app.use(passport.initialize());
-//app.use(passport.session());
+app.use(session({secret:'ilovescotchscotchyscotchscotch'}));
+app.use(passport.initialize());
+app.use(passport.session());
 app.use(flash());
 
-//require('./passport')(passport);
+require('./passport')(passport);
 
 //routes are api
 var apiRoutes = require('./app/routes/api')(app,express);
 app.use('/api',apiRoutes);
-//require('./app/routes/passportRoutes')(app,passport);
+
+require('./app/routes/passportRoutes')(app,passport);
 
 //main catchall route
 //send users to frontend
