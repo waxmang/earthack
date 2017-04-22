@@ -7,10 +7,11 @@ angular.module('mainCtrl',[])
 	//run function automatically when page is loaded
 	angular.element(document).ready(function(){
 		$scope.getUser();
-		$scope.updateUser();
+		//$scope.updateUser();
 	});
 
 	$scope.loggedIn = false;
+	$scope.showUpdateForm = false;
 
 	var checkLoggedIn = function() {
         $http.get('/api/user').then(function(data) {
@@ -38,7 +39,7 @@ angular.module('mainCtrl',[])
 				$scope.user = data['data'];
 
 				console.log($scope.user.id);
-				$http.put('/api/user/' + $scope.user.id, {userType: "Restaurant"}).then(function(data){
+				$http.put('/api/user/' + $scope.user.id, { userType: "Restaurant" }).then(function(data){
 					//refresh user
 					$scope.getUser();
 				});
@@ -49,6 +50,7 @@ angular.module('mainCtrl',[])
 	$scope.getUser = function(){
 		$http.get('/api/user').then(function(data){
 			$scope.user = data['data'];
+			$scope.showUpdateForm = data['data']['location'] == null;
 		})
 	}
 }] );
