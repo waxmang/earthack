@@ -6,6 +6,7 @@ var UserSchema = new Schema ({
     token       : String,
     email       : String,
     name        : {type: String, unique: false},
+    entityName	: String,
     location    : String,
     userType    : String
 });
