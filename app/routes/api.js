@@ -11,8 +11,11 @@ var superSecret = config.secret;
 module.exports =  function(app,express,passport){
     var apiRouter = express.Router();
 
-    apiRouter.get('/restaurantUsers', function(req, res) {
-        res.json('fuck  youbitch');
+    // Get all users
+    apiRouter.get('/users', function(req, res) {
+        User.find({}, function(err, data) {
+            res.json(data);
+        });
     });
 
     return apiRouter;
