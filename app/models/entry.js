@@ -2,7 +2,7 @@ var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
 var EntrySchema = new Schema ({
-    restaurant_id : {type: Schema.Types.ObjectId, ref: 'rUser'},
+    restaurant_id : {type: Schema.Types.ObjectId, ref: 'User'},
     food_category : String,
     food_items : [{type: Schema.Types.ObjectId, ref : 'Item'}]
 });
