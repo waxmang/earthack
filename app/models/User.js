@@ -7,7 +7,7 @@ var rUserSchema = new Schema ({
     email   : String,
     name    : {type: String, unique: false},
     location: String
-
+    
 });
 
 module.exports = mongoose.model('rUser', rUserSchema);
