@@ -169,10 +169,6 @@ angular.module('mainCtrl', ['uiGmapgoogle-maps'])
 	};
 
 
-
-
-
-
 	angular.extend($scope, {
 		map: {
 			center: {
