@@ -21,9 +21,7 @@
 	</style>
 
 	<!-- JS -->
-	<!-- load angular and angular-route via CDN -->
-
-	<script src="https://maps.google.com/maps/api/js"></script>
+	<!-- load angular and angular-route via CDN and Google map API-->
 	<script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.98.1/js/materialize.min.js"></script>
 	<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.3.8/angular.js"></script>
@@ -31,9 +29,11 @@
 	<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.3.8/angular-sanitize.js"></script>
 	<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.3.8/angular-route.js"></script>
 	<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.3.8/angular-animate.js"></script>
-
-	<script src="/bower_components/ngmap/build/scripts/ng-map.min.js"></script>
-
+	
+	<script type="text/javascript" src="bower_components/lodash.js"></script>
+	<script type="text/javascript" src="bower_components/angular-simple-logger.js"></script>
+	<script src='//maps.googleapis.com/maps/api/js?sensor=false'></script>
+	<script src="bower_components/angular-google-maps/dist/angular-google-maps.js"></script>
 	<!-- controllers -->
 	<script src="app/controllers/mainCtrl.js"></script>
 
@@ -104,7 +104,7 @@
 				<a type="submit" class="waves-effect waves-light btn" ng-click="addEntry()">Add Entry</a>
 
 				<a type="submit" class="waves-effect waves-light btn" ng-click="saveEntries()">save all</a>
-
+				
 			</div>
 
 
@@ -113,7 +113,7 @@
 
 		<!--logged in as nonprofit-->
 		<div ng-show="user.userType == 'Nonprofit'">
-			<div class="col s12">The following restaurants have contributed these food items below!</div>
+			<div class="col s12">The following restaurants have contributed these food items below!
 				<div ng-repeat = "entry in entries">
 					<div>Food item: {{entry.food_item}}</div>
 					<div>Amount: {{entry.amount}}</div>
@@ -121,12 +121,16 @@
 					<div class="divider"></div>
 					<div class="section"></div>
 				</div>
-
-
-			<div map-lazy-load="https://maps.google.com/maps/api/js"
-				map-lazy-load-params="https://maps.googleapis.com/maps/api/js?key=AIzaSyA49SaLCsV4ytd_YSkJQfWcNSW6YrW-u0E">
-			 	<ng-map center="41,-87" zoom="3"></ng-map>
 			</div>
+			
+			<ui-gmap-google-map center="map.center" zoom="map.zoom" draggable="true" events="map.events">
+		        <ui-gmap-marker ng-repeat="m in map.markers" coords="m.coords" icon="m.icon" idkey="m.id">
+		        	<ui-gmap-window options="m.window.options" closeClick="closeClick()">
+		                <div>{{ m.window.content }}</div>
+		            </ui-gmap-window>
+		        </ui-gmap-marker>
+		    </ui-gmap-google-map>
+		    
 		</div>
 		<h3>
 

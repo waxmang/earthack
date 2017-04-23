@@ -52,6 +52,12 @@ module.exports =  function(app,express,passport){
                 };
 
     		});
+    	})
+    	
+    	.get(function(req, res) {
+    	    User.findOne({ 'id': req.params.user_id}, function(err, user) {
+    	        res.json(user);
+    	    });
     	});
 
     apiRouter.route('/user/:user_id/entries')

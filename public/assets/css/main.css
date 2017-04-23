@@ -1,8 +1,4 @@
-#map {
-    height: 600px;
-    width: 800px;
-}
-
+.angular-google-map-container { height: 400px; }
 
 fieldset{
     background: #FCFCFC;
