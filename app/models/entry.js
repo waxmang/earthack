@@ -3,9 +3,9 @@ var Schema = mongoose.Schema;
 
 var EntrySchema = new Schema ({
     restaurant_id : String,
-    food_category : String,
-    food_items : [{type: Schema.Types.ObjectId, ref : 'Item'}],
-    status : String
+    food_item : String,
+    status : String,
+    amount: String
 });
 
 module.exports = mongoose.model('Entry',EntrySchema);

@@ -4,6 +4,8 @@ module.exports = {
     'googleAuth': {
         'clientId' : '378002092970-0fbe0n2kpbncirg0jl3nkqc4q43u5age.apps.googleusercontent.com',
         'clientSecret' : '4jDfvsuTbCMLzi1LiFIbBd5x',
-        'callbackURL' : 'http://localhost:8080/auth/google/callback'
-    }
+        'callbackURL' : 'https://earthack-maxwang051.c9users.io/auth/google/callback'
+    },
+    
+    'googleMapsApiKey' : 'AIzaSyA49SaLCsV4ytd_YSkJQfWcNSW6YrW-u0E'
 }

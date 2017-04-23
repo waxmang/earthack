@@ -35,6 +35,7 @@ mongoose.connect(config.database);
 //set static files location; where to look for angular files (index.html)
 //used for requests that our front end will make
 app.use(express.static(__dirname+'/public'));
+app.use('/bower_components',  express.static(__dirname + '/bower_components'));
 app.set('views',path.join(__dirname,'/public/app/views'));
 
 //required for passport

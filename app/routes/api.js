@@ -1,7 +1,6 @@
 var bodyParser = require('body-parser');
 var User = require('./../models/User');
-var Entry = require('./../models/Entry');
-var Item = require('./../models/Item');
+var Entry = require('./../models/entry');
 var jwt = require('jsonwebtoken');
 var config = require('../../config');
 var express=require('express');
@@ -27,12 +26,12 @@ module.exports =  function(app,express,passport){
     apiRouter.route('/user/:user_id')
 
     	.put(function(req,res){
-            console.log(req.params.user_id);
     		User.findOne({'id':req.params.user_id},function(err, user){
 
     			if (err) return res.send(err);
 
-                if (req.user != null && req.user.id == req.params.user_id){
+                if (req.user != null) {
+                    console.log(req.body);
 
         			//update info
         			if (req.body.name) user.name = req.body.name;
@@ -52,18 +51,20 @@ module.exports =  function(app,express,passport){
 
                 };
 
-    		})
-    	})
+    		});
+    	});
 
     apiRouter.route('/user/:user_id/entries')
 
     	//add entry for user
     	.post(function(req,res){
+    	    console.log(req.body);
+    	    
     		var entry = new Entry();
 
     		entry.restaurant_id = req.params.user_id;
-    		entry.food_category = req.body.food_category;
-    		entry.food_items = req.body.food_items;
+    		entry.food_item = req.body.food_item;
+    		entry.amount = req.body.amount;
     		entry.status = req.body.status;
 
     		entry.save(function(err){
@@ -77,10 +78,10 @@ module.exports =  function(app,express,passport){
 
     	//get all entries for user
     	.get(function(req,res){
-    		Entry.find({'restaurant_id':req.params.user_id},function(err,entries){
+    		Entry.find({ restaurant_id : req.params.user_id }, function(err,entries){
     			if (err) return res.send(err);
     			//return entries of that user
-    			res.json(entries);
+    			return res.json(entries);
     		});
     	});
 
@@ -105,8 +106,8 @@ module.exports =  function(app,express,passport){
 
     			if (req.user != null && req.user.id == entry.restaurant_id){
     				if (req.body.restaurant_id) entry.restaurant_id = req.body.restaurant_id;
-    				if (req.body.food_category) entry.food_category = req.body.food_category;
-    				if (req.body.food_items) entry.food_items = req.body.food_items;
+    				if (req.body.food_item) entry.food_item = req.body.food_item;
+    				if (req.body.amount) entry.amount = req.body.amount;
     				if (req.body.status) entry.status = req.body.status;
 
     				entry.save(function(err){
@@ -125,9 +126,10 @@ module.exports =  function(app,express,passport){
     		Entry.remove({
     			_id: id
     		}, function(err,note){
-    			if (err)
-    				res.send(err);
-    			res.json({message:'Successfully deleted!'});
+    			if (err) {
+    				return res.send(err);
+    			}
+    			return res.json({message:'Successfully deleted!'});
     		});
     	});
 
