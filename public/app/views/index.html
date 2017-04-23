@@ -1,27 +1,29 @@
 <!DOCTYPE html>
 <html>
+
 <head>
 	<meta charset="utf-8">
-    <title>Earthack:Too Food to Go</title>
+	<title>Earthack:Too Food to Go</title>
 
-    <!--for angular routing -->
-    <base href="/">
+	<!--for angular routing -->
+	<base href="/">
 
 	<!-- CSS  -->
 	<!-- load bootstrap from CDN and custom CSS -->
 	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.98.1/css/materialize.min.css">
 	<link rel="stylesheet" href="assets/css/main.css">
-	  <script src="https://code.jquery.com/jquery-3.2.1.js"></script>
+	<script src="https://code.jquery.com/jquery-3.2.1.js"></script>
 	<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
 
 	<style>
-	@import url('https://fonts.googleapis.com/css?family=Roboto:100');
+		@import url('https://fonts.googleapis.com/css?family=Roboto:100');
 	</style>
 
 	<!-- JS -->
 	<!-- load angular and angular-route via CDN -->
 
+	<script src="https://maps.google.com/maps/api/js"></script>
 	<script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.98.1/js/materialize.min.js"></script>
 	<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.3.8/angular.js"></script>
@@ -30,6 +32,7 @@
 	<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.3.8/angular-route.js"></script>
 	<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.3.8/angular-animate.js"></script>
 
+	<script src="/bower_components/ngmap/build/scripts/ng-map.min.js"></script>
 
 	<!-- controllers -->
 	<script src="app/controllers/mainCtrl.js"></script>
@@ -44,48 +47,109 @@
 <body ng-app="earthackApp" ng-controller="mainController">
 
 	<!--if logged in-->
-	<div ng-if="loggedIn">
-        you are logged in
+	<div ng-show="loggedIn" class="col s8">
+		<div class="col s9">Welcome, {{user.entityName}}</div>
+		<div class="divider"></div>
+		<div class="section"></div>
 
-        <div class="row" ng-if="showUpdateForm">
-            <form class="col s8">
-                <div class="input-field col s6">
-                    <input placeholder="" id="company" type="text" class="validate">
-                    <label for="company">Company</label>
-                </div>
-                <div class="input-field col s6">
-                    <input id="location" type="text" class="validate">
-                    <label for="location">Location</label>
-                </div>
-                <p>
-                    <input class="with-gap" name="establishment-type" type="radio" id="restaurant"  />
-                    <label for="restaurant">Restaurant</label>
-                </p>
-                <p>
-                    <input class="with-gap" name="establishment-type" type="radio" id="nonprofit"  />
-                    <label for="nonprofit">Nonprofit</label>
-                </p>
+		<div class="row" ng-show="showUpdateForm">
 
-                <a class="waves-effect waves-light btn" ng-click="updateUser()">submit</a>
-            </form>
-        </div>
+
+			<form ng-submit="updateUser()" class="col s8">
+				<div class="input-field col s6">
+					<input placeholder="" id="entityName" type="text" class="validate" ng-model="entityInfo.entityName">
+					<label for="entityName">Entity Name</label>
+				</div>
+				<div class="input-field col s6">
+					<input id="location" type="text" class="validate" ng-model='entityInfo.location'>
+					<label for="location">Location</label>
+				</div>
+				<p>
+					<input class="with-gap" name="establishment-type" type="radio" id="restaurant" value="Restaurant" ng-model="entityInfo.userType" />
+					<label for="restaurant">Restaurant</label>
+				</p>
+				<p>
+					<input class="with-gap" name="establishment-type" type="radio" id="nonprofit" value="Nonprofit" ng-model="entityInfo.userType" />
+					<label for="nonprofit">Nonprofit</label>
+				</p>
+
+				<a type="submit" class="waves-effect waves-light btn" ng-click="updateUser()">submit</a>
+			</form>
+		</div>
+
 
 		<!--logged in as restaurant-->
-		<div ng-if="user.userType == 'Restaurant'">
-			<h2>you are a restaurant</h2>
+		<div ng-show="user.userType == 'Restaurant'">
+			
+			<!--show all entries-->
+			<div ng-repeat="entry in user.entries">
+				<div>Food item: {{entry.food_item}}</div>
+				<div>Amount: {{entry.amount}}</div>
+				<div>Status: {{entry.status}}</div>
+				<div class="divider"></div>
+				<div class="section"></div>
+				
+			</div>
+			
+			<div class="col s12">Thank you for your contributions! Click below to add a new entry.</div>
+
+			<a class="btn-floating btn-large waves-effect waves-light red" ng-click="isFormOpen = !isFormOpen"><i class="material-icons">add</i></a>
+
+			<div ng-init="isFormOpen = false" ng-show="isFormOpen" id="replyForm">
+				<fieldset data-ng-repeat="entry in entries">
+					<input type="text" ng-model="entry.food_item" name="" placeholder="Enter food item name">
+					<input type="text" ng-model="entry.amount" name="" placeholder="Enter food item amount and unit">
+					<button class="remove" ng-show="$last" ng-click="removeEntry()">-</button>
+				</fieldset>
+				<a type="submit" class="waves-effect waves-light btn" ng-click="addEntry()">Add Entry</a>
+
+				<a type="submit" class="waves-effect waves-light btn" ng-click="saveEntries()">save all</a>
+
+			</div>
+
+
 		</div>
 
 
 		<!--logged in as nonprofit-->
-		<div ng-if></div>
+		<div ng-show="user.userType == 'Nonprofit'">
+			<div class="col s12">The following restaurants have contributed these food items below!</div>
+				<div ng-repeat = "entry in entries">
+					<div>Food item: {{entry.food_item}}</div>
+					<div>Amount: {{entry.amount}}</div>
+					<div>Status: {{entry.status}}</div>
+					<div class="divider"></div>
+					<div class="section"></div>
+				</div>
+
+
+			<div map-lazy-load="https://maps.google.com/maps/api/js"
+				map-lazy-load-params="https://maps.googleapis.com/maps/api/js?key=AIzaSyA49SaLCsV4ytd_YSkJQfWcNSW6YrW-u0E">
+			 	<ng-map center="41,-87" zoom="3"></ng-map>
+			</div>
+		</div>
+		<h3>
+
+
+
+
+		</h3>
+		<!--logout button-->
+		<a class="waves-effect waves-light btn-large" href="/logout" target="_self" ng-show='!showUpdateForm'>Logout</a>
 	</div>
 
 	<!--if not logged in-->
-	<div ng-if="!loggedIn">
-        you are not logged in
-    </div>
+	<div ng-show="!loggedIn">
+		You are not logged in.
+		<div>
 
 
+
+		</div>
+
+		<a class="waves-effect waves-light btn-large" href="/auth/google" target="_self">Login/Signup</a>
+	</div>
 
 </body>
+
 </html>

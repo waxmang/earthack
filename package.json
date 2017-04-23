@@ -1,5 +1,3 @@
-//Order: package, server, config, api.js, models, users/google auth/config,google api manager,install ejs, routes/models, frontend
-
 {
   "name": "earthack",
   "version": "1.0.0",
